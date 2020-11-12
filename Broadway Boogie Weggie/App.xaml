@@ -1,0 +1,11 @@
+﻿<Application x:Class="Broadway_Boogie_Weggie.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Broadway_Boogie_Weggie"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <vm:ViewModelLocator x:Key="Locator" xmlns:vm="clr-namespace:Broadway_Boogie_Weggie.ViewModels" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
