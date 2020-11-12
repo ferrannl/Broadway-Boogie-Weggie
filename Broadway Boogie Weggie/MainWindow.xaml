@@ -10,7 +10,7 @@
         <DockPanel>
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="Disc" Command="{Binding SetupGalaxyDiscCommand}"/>
+                    <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
                 </MenuItem>
                 <MenuItem Header="_Instellingen">
                     <MenuItem Header="Configureer sneltoetsen" Command="{Binding OpenShortcutsCommand}"/>

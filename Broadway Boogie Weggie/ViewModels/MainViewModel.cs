@@ -1,4 +1,5 @@
-﻿using Broadway_Boogie_Weggie.Factories;
+﻿using Broadway_Boogie_Weggie.Commands;
+using Broadway_Boogie_Weggie.Factories;
 using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
@@ -23,6 +24,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        public ICommand SetupGalleryDiscCommand { get; set; }
         public ObservableCollection<Tile> ObservableTiles { get; set; }
         public ObservableCollection<Artist> ObservableArtists { get; set; }
 
@@ -32,15 +34,28 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             ObservableTiles = new ObservableCollection<Tile>();
             ObservableArtists = new ObservableCollection<Artist>();
+            SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
         }
 
         public void SetupGallery(string importType)
         {
-            this.ObservableTiles.Clear();
-            this.ObservableArtists.Clear();
-
+            try
+            {
+                this.ObservableTiles.Clear();
+                this.ObservableArtists.Clear();
+                string filePath = Import(importType);
+                List<string> content = Read(filePath);
+                List<List<KeyValuePair<string, string>>> starList;
+                List<KeyValuePair<string, string>> neighbourList;
+                Parse(content, out starList, out neighbourList);
+                Gallery galaxy = Build(starList, neighbourList);
+                //StartGalaxyThread(galaxy);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
         }
-
         private List<string> Read(string filePath)
         {
             IReader reader = ReaderFactory.Instance.CreateReader(filePath);
@@ -58,7 +73,21 @@ namespace Broadway_Boogie_Weggie.ViewModels
             Parser parser = ParserFactory.Instance.CreateParser(content[0]);
             parser.Parse(content, out tileList, out neighbourList);
         }
+        private Gallery Build(List<List<KeyValuePair<string, string>>> tileList, List<KeyValuePair<string, string>> neighbourList)
+        {
+            GalleryBuilder builder = new GalleryBuilder();
 
+            foreach (List<KeyValuePair<string, string>> t in tileList)
+            {
+                builder.AddTile(t);
+            }
+            foreach (KeyValuePair<string, string> n in neighbourList)
+            {
+                builder.LinkTiles(n.Key, n.Value);
+            }
+
+            return builder.Build();
+        }
     }
 }
 
