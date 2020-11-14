@@ -11,9 +11,12 @@ namespace Broadway_Boogie_Weggie.Models
 {
     public class Gallery
     {
-        public readonly static int WIDTH, HEIGHT = 800;
-        public readonly static int TILE_WIDTH, TILE_HEIGHT = WIDTH / 53;
-        public readonly static int ARIST_WIDTH, ARIST_HEIGHT = TILE_WIDTH / 2;
+        public readonly static int WIDTH = 800;
+        public readonly static int HEIGHT = 800;
+        public readonly static int TILE_WIDTH = WIDTH / 53;
+        public readonly static int TILE_HEIGHT = HEIGHT / 53;
+        public readonly static int ARIST_WIDTH = TILE_WIDTH / 2;
+        public readonly static int ARIST_HEIGHT = TILE_WIDTH / 2;
         public List<Tile> Tiles;
         public List<Artist> Artists;
 
@@ -22,7 +25,6 @@ namespace Broadway_Boogie_Weggie.Models
             Tiles = new List<Tile>();
             Artists = new List<Artist>();
         }
-
 
         public void Tick()
         {

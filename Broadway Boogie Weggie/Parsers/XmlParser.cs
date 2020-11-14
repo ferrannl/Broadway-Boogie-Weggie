@@ -75,8 +75,8 @@ namespace Broadway_Boogie_Weggie.Parsers
         private Tile ConvertXmlToTile(XmlNode xn, XmlNode xnWeight, string color)
         {
             var tile = new Tile(
-                int.Parse(xn.Attributes["x"].Value),
-                int.Parse(xn.Attributes["y"].Value),
+                double.Parse(xn.Attributes["x"].Value),
+                double.Parse(xn.Attributes["y"].Value),
                 int.Parse(xnWeight.Attributes["weight"].Value),
                 color);
             return tile;
@@ -90,8 +90,8 @@ namespace Broadway_Boogie_Weggie.Parsers
             {
                 foreach (Tile tile in tileList)
                 {
-                    int parsedX = int.Parse(xnNeighbour.Attributes["x"].Value);
-                    int parsedY = int.Parse(xnNeighbour.Attributes["y"].Value);
+                    double parsedX = double.Parse(xnNeighbour.Attributes["x"].Value);
+                    double parsedY = double.Parse(xnNeighbour.Attributes["y"].Value);
                     if (tile.X == parsedX && tile.Y == parsedY)
                     {
                         neighbours.Add(tileList.Find(currentTile => currentTile.X == parsedX && currentTile.Y == parsedY));

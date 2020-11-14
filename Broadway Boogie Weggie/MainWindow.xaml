@@ -12,24 +12,26 @@
                 <MenuItem Header="_File">
                     <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
                 </MenuItem>
-                <MenuItem Header="_Instellingen">
+                <!--<MenuItem Header="_Instellingen">
                     <MenuItem Header="Configureer sneltoetsen" Command="{Binding OpenShortcutsCommand}"/>
-                </MenuItem>
+                </MenuItem>-->
             </Menu>
             <Canvas Width="800" Height="800">
-                <ItemsControl ItemsSource="{Binding Path=ObservableTiles}">
+                <ItemsControl ItemsSource="{Binding ObservableTiles}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <Canvas />
+                            <Canvas/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
-                                <Rectangle.RenderTransform>
-                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
-                                </Rectangle.RenderTransform>
-                            </Rectangle>
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="Black"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

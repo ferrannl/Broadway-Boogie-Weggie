@@ -13,6 +13,8 @@ namespace Broadway_Boogie_Weggie.Models
         public double Y { get; set; }
         public double Vx { get; set; }
         public double Vy { get; set; }
+        public double Width { get => Gallery.ARIST_WIDTH; }
+        public double Height { get => Gallery.ARIST_HEIGHT; }
         public string Color { get => "black"; }
         public Artist(double x, double y, double vx, double vy)
         {

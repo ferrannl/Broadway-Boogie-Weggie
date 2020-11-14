@@ -30,7 +30,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public ObservableCollection<Tile> ObservableTiles { get; set; }
         public ObservableCollection<Artist> ObservableArtists { get; set; }
 
-        private GalleryBuilder builder;
+        private GalleryBuilder builder = null;
 
         public GalleryThread galleryThread;
 
@@ -45,8 +45,8 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             try
             {
-                this.ObservableTiles.Clear();
-                this.ObservableArtists.Clear();
+                ObservableTiles.Clear();
+                ObservableArtists.Clear();
                 string filePath = Import(importType);
                 List<string> content = Read(filePath);
                 Gallery gallery = null;

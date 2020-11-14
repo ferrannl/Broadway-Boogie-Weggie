@@ -9,14 +9,16 @@ namespace Broadway_Boogie_Weggie.Models
 {
     public class Tile
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
         public int Weight { get; set; }
+        public double Width { get => Gallery.TILE_WIDTH; }
+        public double Height { get => Gallery.TILE_HEIGHT; }
         public string Color { get; set; }
 
         public List<Tile> neighbours;
 
-        public Tile(int x, int y, int weight, string color)
+        public Tile(double x, double y, int weight, string color)
         {
             this.X = x;
             this.Y = y;
