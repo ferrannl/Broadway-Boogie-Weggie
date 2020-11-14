@@ -1,4 +1,5 @@
 ﻿using Broadway_Boogie_Weggie.ViewModels;
+using Broadway_Boogie_Weggie.Visitors;
 using CommonServiceLocator;
 using System;
 using System.Collections.Generic;
@@ -11,36 +12,23 @@ namespace Broadway_Boogie_Weggie.Models
     public class Gallery
     {
         public readonly static int WIDTH, HEIGHT = 800;
-        public List<Tile> tiles;
+        public readonly static int TILE_WIDTH, TILE_HEIGHT = WIDTH / 53;
+        public readonly static int ARIST_WIDTH, ARIST_HEIGHT = TILE_WIDTH / 2;
+        public List<Tile> Tiles;
+        public List<Artist> Artists;
 
         public Gallery()
         {
-            tiles = new List<Tile>();
-
+            Tiles = new List<Tile>();
+            Artists = new List<Artist>();
         }
 
-        public void SetupGallery()
-        {
-
-        }
 
         public void Tick()
         {
-            foreach (Star s in stars)
+            foreach (Artist a in Artists)
             {
-                s.Step();
-                s.CheckCollisionWall();
-            }
-            foreach (KeyValuePair<Star, bool> c in collisionDetection.CheckCollision(stars))
-            {
-                if (c.Value)
-                {
-                    c.Key.OnCollision(this);
-                }
-                else
-                {
-                    c.Key.OnNoCollision();
-                }
+                a.Step();
             }
         }
 
@@ -49,12 +37,14 @@ namespace Broadway_Boogie_Weggie.Models
             try
             {
                 var mainViewModel = ServiceLocator.Current.GetInstance<MainViewModel>();
-                // DrawStarVisitor starVisitor = new DrawStarVisitor(mainViewModel);
-                //   DrawConnectionVisitor connectionVisitor = new DrawConnectionVisitor(mainViewModel);
-                foreach (Tile tile in tiles)
+                NormalVisitor normalVisitor = new NormalVisitor(mainViewModel);
+                foreach (Tile tile in Tiles)
                 {
-                    // star.Accept(starVisitor);
-                    // star.Accept(connectionVisitor);
+                    tile.Accept(normalVisitor);
+                }
+                foreach (Artist artist in Artists)
+                {
+                    artist.Accept(normalVisitor);
                 }
             }
             catch (Exception e) { }

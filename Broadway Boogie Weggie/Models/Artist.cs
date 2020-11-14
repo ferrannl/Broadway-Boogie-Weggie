@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Broadway_Boogie_Weggie.Visitors;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +13,13 @@ namespace Broadway_Boogie_Weggie.Models
         public double Y { get; set; }
         public double Vx { get; set; }
         public double Vy { get; set; }
-        public string Color { get; set; }
-        public Artist(double x, double y, double vx, double vy, string color)
+        public string Color { get => "black"; }
+        public Artist(double x, double y, double vx, double vy)
         {
             this.X = x;
             this.Y = y;
             this.Vx = vx;
             this.Vy = vy;
-            this.Color = color;
         }
         public void Step()
         {
@@ -32,6 +32,10 @@ namespace Broadway_Boogie_Weggie.Models
                 Vx = -Vx;
             if (Y <= 3.5 || Y + 3.5 >= Gallery.HEIGHT)
                 Vy = -Vy;
+        }
+        public void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
         }
     }
 }

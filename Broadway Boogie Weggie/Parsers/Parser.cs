@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Broadway_Boogie_Weggie.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Broadway_Boogie_Weggie.Parsers
 {
-    public abstract class Parser
+    public abstract class Parser<T>
     {
         protected abstract string FileType();
 
@@ -15,6 +16,6 @@ namespace Broadway_Boogie_Weggie.Parsers
             return fileType.ToLower().Equals(FileType());
         }
 
-        public abstract void Parse(List<string> content, out List<List<KeyValuePair<string, string>>> tileList, out List<KeyValuePair<string, string>> neighbourList);
+        public abstract List<T> Parse(List<string> content);
     }
 }

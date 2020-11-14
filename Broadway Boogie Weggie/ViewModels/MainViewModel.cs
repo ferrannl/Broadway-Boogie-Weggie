@@ -1,9 +1,11 @@
-﻿using Broadway_Boogie_Weggie.Commands;
+﻿using Broadway_Boogie_Weggie.Builders;
+using Broadway_Boogie_Weggie.Commands;
 using Broadway_Boogie_Weggie.Factories;
 using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
 using Broadway_Boogie_Weggie.Readers;
+using Broadway_Boogie_Weggie.Threads;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
@@ -28,7 +30,9 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public ObservableCollection<Tile> ObservableTiles { get; set; }
         public ObservableCollection<Artist> ObservableArtists { get; set; }
 
-        //public GalaxyThread galaxyThread;
+        private GalleryBuilder builder;
+
+        public GalleryThread galleryThread;
 
         public MainViewModel()
         {
@@ -45,17 +49,32 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 this.ObservableArtists.Clear();
                 string filePath = Import(importType);
                 List<string> content = Read(filePath);
-                List<List<KeyValuePair<string, string>>> starList;
-                List<KeyValuePair<string, string>> neighbourList;
-                Parse(content, out starList, out neighbourList);
-                Gallery galaxy = Build(starList, neighbourList);
-                //StartGalaxyThread(galaxy);
+                Gallery gallery = null;
+                if (content[0].Equals("csv"))
+                {
+                    gallery = Build(CsvParse(content));
+                }
+                else if (content[0].Equals("xml"))
+                {
+                    gallery = Build(XmlParse(content));
+                }
+                StartGalleryThread(gallery);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
         }
+
+        private void StartGalleryThread(Gallery gallery)
+        {
+            if (galleryThread != null)
+            {
+                galleryThread.Abort();
+            }
+            galleryThread = new GalleryThread(gallery);
+        }
+
         private List<string> Read(string filePath)
         {
             IReader reader = ReaderFactory.Instance.CreateReader(filePath);
@@ -68,24 +87,38 @@ namespace Broadway_Boogie_Weggie.ViewModels
             return importer.Import();
         }
 
-        private void Parse(List<string> content, out List<List<KeyValuePair<string, string>>> tileList, out List<KeyValuePair<string, string>> neighbourList)
+        private List<Tile> XmlParse(List<string> content)
         {
-            Parser parser = ParserFactory.Instance.CreateParser(content[0]);
-            parser.Parse(content, out tileList, out neighbourList);
+            XmlParser parser = ParserFactory.Instance.CreateXmlParser(content[0]);
+            return parser.Parse(content);
         }
-        private Gallery Build(List<List<KeyValuePair<string, string>>> tileList, List<KeyValuePair<string, string>> neighbourList)
+        private List<Artist> CsvParse(List<string> content)
         {
-            GalleryBuilder builder = new GalleryBuilder();
-
-            foreach (List<KeyValuePair<string, string>> t in tileList)
+            CsvParser parser = ParserFactory.Instance.CreateCsvParser(content[0]);
+            return parser.Parse(content);
+        }
+        private Gallery Build(List<Tile> tileList)
+        {
+            if (builder == null)
+            {
+                builder = new GalleryBuilder();
+            }
+            foreach (Tile t in tileList)
             {
                 builder.AddTile(t);
             }
-            foreach (KeyValuePair<string, string> n in neighbourList)
+            return builder.Build();
+        }
+        private Gallery Build(List<Artist> artistList)
+        {
+            if (builder == null)
             {
-                builder.LinkTiles(n.Key, n.Value);
+                builder = new GalleryBuilder();
             }
-
+            foreach (Artist a in artistList)
+            {
+                builder.AddArtist(a);
+            }
             return builder.Build();
         }
     }

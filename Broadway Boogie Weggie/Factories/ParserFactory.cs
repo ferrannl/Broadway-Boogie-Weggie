@@ -23,26 +23,14 @@ namespace Broadway_Boogie_Weggie.Factories
             }
         }
 
-        public Parser CreateParser(string fileType)
+        public XmlParser CreateXmlParser(string fileType)
         {
-            Type type = typeof(Parser);
-            IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => type.IsAssignableFrom(p));
+            return new XmlParser();
+        }
 
-            foreach (Type t in types)
-            {
-                if (!t.IsAbstract)
-                {
-                    Parser parser = (Parser)Activator.CreateInstance(t);
-                    if (parser.CanParse(fileType))
-                    {
-                        return parser;
-                    }
-                }
-            }
-            throw new Exception("Bestand type wordt niet ondersteund.");
-
+        public CsvParser CreateCsvParser(string fileType)
+        {
+            return new CsvParser();
         }
     }
 }

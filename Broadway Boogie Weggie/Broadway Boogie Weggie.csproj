@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,21 +56,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Builders\GalleryBuilder.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\SetupGalleryDiscCommand.cs" />
     <Compile Include="Factories\ImporterFactory.cs" />
     <Compile Include="Factories\ParserFactory.cs" />
     <Compile Include="Factories\ReaderFactory.cs" />
-    <Compile Include="Factories\TileFactory.cs" />
     <Compile Include="Importers\DiscImporter.cs" />
     <Compile Include="Importers\Importer.cs" />
     <Compile Include="Parsers\CsvParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
-    <Compile Include="Parsers\XmlPaser.cs" />
+    <Compile Include="Parsers\XmlParser.cs" />
     <Compile Include="Readers\IReader.cs" />
     <Compile Include="Readers\DiscReader.cs" />
+    <Compile Include="Threads\GalleryThread.cs" />
+    <Compile Include="Utils\StringToColorConverter.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Visitors\NormalVisitor.cs" />
+    <Compile Include="Visitors\IVisitor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -115,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Builders\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MvvmLight">
