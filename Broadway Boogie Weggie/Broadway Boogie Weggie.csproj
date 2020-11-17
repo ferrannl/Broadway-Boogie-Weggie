@@ -64,6 +64,7 @@
     <Compile Include="Factories\ReaderFactory.cs" />
     <Compile Include="Importers\DiscImporter.cs" />
     <Compile Include="Importers\Importer.cs" />
+    <Compile Include="Models\DrawTile.cs" />
     <Compile Include="Parsers\CsvParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\XmlParser.cs" />

@@ -27,7 +27,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public ICommand SetupGalleryDiscCommand { get; set; }
-        public ObservableCollection<Tile> ObservableTiles { get; set; }
+        public ObservableCollection<DrawTile> ObservableTiles { get; set; }
         public ObservableCollection<Artist> ObservableArtists { get; set; }
 
         private GalleryBuilder builder = null;
@@ -36,7 +36,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
 
         public MainViewModel()
         {
-            ObservableTiles = new ObservableCollection<Tile>();
+            ObservableTiles = new ObservableCollection<DrawTile>();
             ObservableArtists = new ObservableCollection<Artist>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
         }

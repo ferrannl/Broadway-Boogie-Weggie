@@ -15,12 +15,12 @@ namespace Broadway_Boogie_Weggie.Visitors
         public NormalVisitor(MainViewModel main)
         {
             this.main = main;
-            main.ObservableTiles = new ObservableCollection<Tile>();
+            main.ObservableTiles = new ObservableCollection<DrawTile>();
         }
 
         public void Visit(Tile tile)
         {
-            main.ObservableTiles.Add(tile);
+            main.ObservableTiles.Add(new DrawTile(tile.X, tile.Y, tile.Weight, tile.Color));
         }
 
         public void Visit(Artist artist)
