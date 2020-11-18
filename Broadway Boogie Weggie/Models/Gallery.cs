@@ -15,8 +15,8 @@ namespace Broadway_Boogie_Weggie.Models
         public readonly static int HEIGHT = 800;
         public readonly static int TILE_WIDTH = WIDTH / 53;
         public readonly static int TILE_HEIGHT = HEIGHT / 53;
-        public readonly static int ARIST_WIDTH = TILE_WIDTH / 2;
-        public readonly static int ARIST_HEIGHT = TILE_WIDTH / 2;
+        public readonly static int ARTIST_WIDTH = TILE_WIDTH / 2;
+        public readonly static int ARTIST_HEIGHT = TILE_WIDTH / 2;
         public List<Tile> Tiles;
         public List<Artist> Artists;
 
@@ -31,6 +31,7 @@ namespace Broadway_Boogie_Weggie.Models
             foreach (Artist a in Artists)
             {
                 a.Step();
+                a.CheckCollisionWall();
             }
         }
 
@@ -40,9 +41,12 @@ namespace Broadway_Boogie_Weggie.Models
             {
                 var mainViewModel = ServiceLocator.Current.GetInstance<MainViewModel>();
                 NormalVisitor normalVisitor = new NormalVisitor(mainViewModel);
-                foreach (Tile tile in Tiles)
+                if (Tiles.Count > 0)
                 {
-                    tile.Accept(normalVisitor);
+                    foreach (Tile tile in Tiles)
+                    {
+                        tile.Accept(normalVisitor);
+                    }
                 }
                 foreach (Artist artist in Artists)
                 {

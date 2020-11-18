@@ -13,8 +13,8 @@ namespace Broadway_Boogie_Weggie.Models
         public double Y { get; set; }
         public double Vx { get; set; }
         public double Vy { get; set; }
-        public double Width { get => Gallery.ARIST_WIDTH; }
-        public double Height { get => Gallery.ARIST_HEIGHT; }
+        public double Width { get => Gallery.ARTIST_WIDTH; }
+        public double Height { get => Gallery.ARTIST_HEIGHT; }
         public string Color { get => "black"; }
         public Artist(double x, double y, double vx, double vy)
         {
@@ -23,6 +23,11 @@ namespace Broadway_Boogie_Weggie.Models
             this.Vx = vx;
             this.Vy = vy;
         }
+        public Artist(double x, double y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
         public void Step()
         {
             this.X += Vx;
@@ -30,9 +35,9 @@ namespace Broadway_Boogie_Weggie.Models
         }
         public void CheckCollisionWall()
         {
-            if (X <= 3.5 || X + 3.5 >= Gallery.WIDTH)
+            if (X <= Gallery.ARTIST_WIDTH || X + Gallery.ARTIST_WIDTH >= Gallery.WIDTH)
                 Vx = -Vx;
-            if (Y <= 3.5 || Y + 3.5 >= Gallery.HEIGHT)
+            if (Y <= Gallery.ARTIST_HEIGHT || Y + Gallery.ARTIST_HEIGHT >= Gallery.HEIGHT)
                 Vy = -Vy;
         }
         public void Accept(IVisitor visitor)

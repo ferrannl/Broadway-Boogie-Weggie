@@ -25,10 +25,10 @@ namespace Broadway_Boogie_Weggie.Parsers
                 XmlDocument xml = new XmlDocument();
                 xml.LoadXml(string.Join("", content.Skip(2)));
 
-                XmlNodeList xnList = xml.SelectNodes("/canvas/nodes/Y");
-                xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/B").Cast<XmlNode>());
-                xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/R").Cast<XmlNode>());
-                xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/G").Cast<XmlNode>());
+                XmlNodeList xnList = xml.SelectNodes("/canvas/nodes")[0].ChildNodes;
+                //xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/B").Cast<XmlNode>());
+                //xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/R").Cast<XmlNode>());
+                //xnList.Cast<XmlNode>().Concat(xml.SelectNodes("/canvas/nodes/G").Cast<XmlNode>());
 
                 XmlNodeList xnNodeTypes = xml.SelectNodes("/canvas/nodeTypes/nodeType");
 
@@ -52,7 +52,7 @@ namespace Broadway_Boogie_Weggie.Parsers
                             break;
                         case "G":
                             xnWeight = xnNodeTypes.Cast<XmlNode>().ToList().Find(xnNodeType => xnNodeType.Attributes["tag"].Value.Equals("G"));
-                            color = "Green";
+                            color = "LightGray";
                             break;
                     }
                     tileList.Add(ConvertXmlToTile(xn, xnWeight, color));

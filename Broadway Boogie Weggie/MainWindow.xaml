@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Broadway_Boogie_Weggie"
         mc:Ignorable="d"
-        Title="Broadway Boogie Weggie" Height="900" Width="900"  DataContext="{Binding Main, Source={StaticResource Locator}}" ResizeMode="NoResize">
+        Title="Broadway Boogie Weggie" SizeToContent="WidthAndHeight" DataContext="{Binding Main, Source={StaticResource Locator}}" ResizeMode="NoResize">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -25,9 +25,25 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="Black">
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
                                 <Rectangle.RenderTransform>
-                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}" />
+                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding ObservableArtists}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                                <Rectangle.RenderTransform>
+                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
                                 </Rectangle.RenderTransform>
                             </Rectangle>
                         </DataTemplate>

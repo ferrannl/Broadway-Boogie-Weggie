@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -48,7 +49,6 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
@@ -64,13 +64,13 @@
     <Compile Include="Factories\ReaderFactory.cs" />
     <Compile Include="Importers\DiscImporter.cs" />
     <Compile Include="Importers\Importer.cs" />
+    <Compile Include="Models\DrawArtist.cs" />
     <Compile Include="Models\DrawTile.cs" />
     <Compile Include="Parsers\CsvParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\XmlParser.cs" />
     <Compile Include="Readers\IReader.cs" />
     <Compile Include="Readers\DiscReader.cs" />
-    <Compile Include="Threads\GalleryThread.cs" />
     <Compile Include="Utils\StringToColorConverter.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />

@@ -5,7 +5,6 @@ using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
 using Broadway_Boogie_Weggie.Readers;
-using Broadway_Boogie_Weggie.Threads;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
@@ -16,29 +15,28 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Broadway_Boogie_Weggie.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
         public ICommand SetupGalleryDiscCommand { get; set; }
-        public ObservableCollection<DrawTile> ObservableTiles { get; set; }
+        public ObservableCollection<Tile> ObservableTiles { get; set; }
         public ObservableCollection<Artist> ObservableArtists { get; set; }
 
         private GalleryBuilder builder = null;
-
-        public GalleryThread galleryThread;
+        private Gallery gallery = null;
 
         public MainViewModel()
         {
-            ObservableTiles = new ObservableCollection<DrawTile>();
+            ObservableTiles = new ObservableCollection<Tile>();
             ObservableArtists = new ObservableCollection<Artist>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
+            CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
 
         public void SetupGallery(string importType)
@@ -49,7 +47,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 ObservableArtists.Clear();
                 string filePath = Import(importType);
                 List<string> content = Read(filePath);
-                Gallery gallery = null;
+                gallery = null;
                 if (content[0].Equals("csv"))
                 {
                     gallery = Build(CsvParse(content));
@@ -58,7 +56,6 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 {
                     gallery = Build(XmlParse(content));
                 }
-                StartGalleryThread(gallery);
             }
             catch (Exception e)
             {
@@ -66,13 +63,13 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
         }
 
-        private void StartGalleryThread(Gallery gallery)
+        private void UpdateGallery()
         {
-            if (galleryThread != null)
+            if (gallery != null)
             {
-                galleryThread.Abort();
+                gallery.Tick();
+                gallery.Draw();
             }
-            galleryThread = new GalleryThread(gallery);
         }
 
         private List<string> Read(string filePath)
@@ -121,6 +118,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
             return builder.Build();
         }
+
     }
 }
 
