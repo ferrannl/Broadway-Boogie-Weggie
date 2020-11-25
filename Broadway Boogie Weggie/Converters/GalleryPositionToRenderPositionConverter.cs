@@ -8,8 +8,8 @@ namespace Broadway_Boogie_Weggie.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double position = (double)value * (800 / 53);
-            return position;
+            double position = (double)value;
+            return position * (800 / 53);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

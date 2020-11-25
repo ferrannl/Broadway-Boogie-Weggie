@@ -42,6 +42,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 {
                     Squares.Add(new SquareViewModel(tile));
                 }
+                Squares.Add(new SquareViewModel(new Tile(53, 53, 1, "purple")));
             }
         }
 

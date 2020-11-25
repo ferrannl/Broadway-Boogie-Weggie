@@ -10,15 +10,18 @@
     <Window.Resources>
         <converters:GalleryPositionToRenderPositionConverter x:Key="PositionConverter"/>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding SetupGalleryDiscCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
+        <!--<Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
             </MenuItem>
-            <!--<MenuItem Header="_Instellingen">
+            <MenuItem Header="_Instellingen">
                     <MenuItem Header="Configureer sneltoetsen" Command="{Binding OpenShortcutsCommand}"/>
-                </MenuItem>-->
-        </Menu>
+                </MenuItem>
+        </Menu>-->
         <Canvas Width="800" Height="800">
             <ItemsControl ItemsSource="{Binding Squares}">
                 <ItemsControl.ItemsPanel>
