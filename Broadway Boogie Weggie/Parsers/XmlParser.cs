@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Broadway_Boogie_Weggie.Parsers
@@ -62,7 +60,7 @@ namespace Broadway_Boogie_Weggie.Parsers
                 {
                     XmlNode xmlTile = xnList[i];
                     Tile tile = tileList[i];
-                    tile.neighbours.AddRange(GetNeighbours(xmlTile));
+                    //tile.neighbours.AddRange(GetNeighbours(xmlTile));
                 }
                 return tileList;
             }
@@ -75,8 +73,8 @@ namespace Broadway_Boogie_Weggie.Parsers
         private Tile ConvertXmlToTile(XmlNode xn, XmlNode xnWeight, string color)
         {
             var tile = new Tile(
-                double.Parse(xn.Attributes["x"].Value),
-                double.Parse(xn.Attributes["y"].Value),
+                int.Parse(xn.Attributes["x"].Value),
+                int.Parse(xn.Attributes["y"].Value),
                 int.Parse(xnWeight.Attributes["weight"].Value),
                 color);
             return tile;
@@ -92,9 +90,9 @@ namespace Broadway_Boogie_Weggie.Parsers
                 {
                     double parsedX = double.Parse(xnNeighbour.Attributes["x"].Value);
                     double parsedY = double.Parse(xnNeighbour.Attributes["y"].Value);
-                    if (tile.X == parsedX && tile.Y == parsedY)
+                    if (tile.GalleryX == parsedX && tile.GalleryY == parsedY)
                     {
-                        neighbours.Add(tileList.Find(currentTile => currentTile.X == parsedX && currentTile.Y == parsedY));
+                        neighbours.Add(tileList.Find(currentTile => currentTile.GalleryX == parsedX && currentTile.GalleryY == parsedY));
                     }
                 }
             }

@@ -1,22 +1,13 @@
-﻿using Broadway_Boogie_Weggie.Builders;
-using Broadway_Boogie_Weggie.Commands;
+﻿using Broadway_Boogie_Weggie.Commands;
 using Broadway_Boogie_Weggie.Factories;
 using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
 using Broadway_Boogie_Weggie.Readers;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -25,50 +16,43 @@ namespace Broadway_Boogie_Weggie.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public ICommand SetupGalleryDiscCommand { get; set; }
-        public ObservableCollection<Tile> ObservableTiles { get; set; }
-        public ObservableCollection<Artist> ObservableArtists { get; set; }
-
-        private GalleryBuilder builder = null;
-        private Gallery gallery = null;
+        public ObservableCollection<SquareViewModel> Squares { get; set; }
 
         public MainViewModel()
         {
-            ObservableTiles = new ObservableCollection<Tile>();
-            ObservableArtists = new ObservableCollection<Artist>();
+            Squares = new ObservableCollection<SquareViewModel>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
 
         public void SetupGallery(string importType)
         {
-            try
+            string filePath = Import(importType);
+            List<string> content = Read(filePath);
+            if (content[0].Equals("csv"))
             {
-                ObservableTiles.Clear();
-                ObservableArtists.Clear();
-                string filePath = Import(importType);
-                List<string> content = Read(filePath);
-                gallery = null;
-                if (content[0].Equals("csv"))
+                foreach (var artist in CsvParse(content))
                 {
-                    gallery = Build(CsvParse(content));
-                }
-                else if (content[0].Equals("xml"))
-                {
-                    gallery = Build(XmlParse(content));
+                    Squares.Add(new SquareViewModel(artist));
                 }
             }
-            catch (Exception e)
+            else if (content[0].Equals("xml"))
             {
-                MessageBox.Show(e.Message);
+                foreach (var tile in XmlParse(content))
+                {
+                    Squares.Add(new SquareViewModel(tile));
+                }
             }
         }
 
         private void UpdateGallery()
         {
-            if (gallery != null)
+            foreach (var square in Squares.Select(sq => sq.Square))
             {
-                gallery.Tick();
-                gallery.Draw();
+                if (square is Artist artist)
+                {
+                    artist.Step();
+                }
             }
         }
 
@@ -93,30 +77,6 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             CsvParser parser = ParserFactory.Instance.CreateCsvParser(content[0]);
             return parser.Parse(content);
-        }
-        private Gallery Build(List<Tile> tileList)
-        {
-            if (builder == null)
-            {
-                builder = new GalleryBuilder();
-            }
-            foreach (Tile t in tileList)
-            {
-                builder.AddTile(t);
-            }
-            return builder.Build();
-        }
-        private Gallery Build(List<Artist> artistList)
-        {
-            if (builder == null)
-            {
-                builder = new GalleryBuilder();
-            }
-            foreach (Artist a in artistList)
-            {
-                builder.AddArtist(a);
-            }
-            return builder.Build();
         }
 
     }

@@ -4,52 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Broadway_Boogie_Weggie"
+        xmlns:converters="clr-namespace:Broadway_Boogie_Weggie.Converters"
         mc:Ignorable="d"
         Title="Broadway Boogie Weggie" SizeToContent="WidthAndHeight" DataContext="{Binding Main, Source={StaticResource Locator}}" ResizeMode="NoResize">
-    <Grid>
-        <DockPanel>
-            <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_File">
-                    <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
-                </MenuItem>
-                <!--<MenuItem Header="_Instellingen">
+    <Window.Resources>
+        <converters:GalleryPositionToRenderPositionConverter x:Key="PositionConverter"/>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
+            </MenuItem>
+            <!--<MenuItem Header="_Instellingen">
                     <MenuItem Header="Configureer sneltoetsen" Command="{Binding OpenShortcutsCommand}"/>
                 </MenuItem>-->
-            </Menu>
-            <Canvas Width="800" Height="800">
-                <ItemsControl ItemsSource="{Binding ObservableTiles}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
-                                <Rectangle.RenderTransform>
-                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
-                                </Rectangle.RenderTransform>
-                            </Rectangle>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <ItemsControl ItemsSource="{Binding ObservableArtists}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
-                                <Rectangle.RenderTransform>
-                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}"/>
-                                </Rectangle.RenderTransform>
-                            </Rectangle>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Canvas>
-        </DockPanel>
-    </Grid>
+        </Menu>
+        <Canvas Width="800" Height="800">
+            <ItemsControl ItemsSource="{Binding Squares}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                            <Rectangle.RenderTransform>
+                                <TranslateTransform X="{Binding GalleryX, Converter={StaticResource PositionConverter}}" Y="{Binding GalleryY, Converter={StaticResource PositionConverter}}"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+    </DockPanel>
 </Window>

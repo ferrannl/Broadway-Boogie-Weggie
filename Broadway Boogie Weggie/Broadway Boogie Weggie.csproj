@@ -59,6 +59,7 @@
     <Compile Include="Builders\GalleryBuilder.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\SetupGalleryDiscCommand.cs" />
+    <Compile Include="Converters\GalleryPositionToRenderPositionConverter.cs" />
     <Compile Include="Factories\ImporterFactory.cs" />
     <Compile Include="Factories\ParserFactory.cs" />
     <Compile Include="Factories\ReaderFactory.cs" />
@@ -66,6 +67,9 @@
     <Compile Include="Importers\Importer.cs" />
     <Compile Include="Models\DrawArtist.cs" />
     <Compile Include="Models\DrawTile.cs" />
+    <Compile Include="Models\IObservable.cs" />
+    <Compile Include="Models\IObserver.cs" />
+    <Compile Include="Models\Square.cs" />
     <Compile Include="Parsers\CsvParser.cs" />
     <Compile Include="Parsers\Parser.cs" />
     <Compile Include="Parsers\XmlParser.cs" />
@@ -73,6 +77,7 @@
     <Compile Include="Readers\DiscReader.cs" />
     <Compile Include="Utils\StringToColorConverter.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\SquareViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Visitors\NormalVisitor.cs" />
     <Compile Include="Visitors\IVisitor.cs" />
