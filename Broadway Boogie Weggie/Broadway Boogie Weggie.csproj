@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Builders\GalleryBuilder.cs" />
     <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\PausePlayGalleryCommand.cs" />
     <Compile Include="Commands\SetupGalleryDiscCommand.cs" />
     <Compile Include="Converters\GalleryPositionToRenderPositionConverter.cs" />
     <Compile Include="Factories\ImporterFactory.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Parsers\XmlParser.cs" />
     <Compile Include="Readers\IReader.cs" />
     <Compile Include="Readers\DiscReader.cs" />
+    <Compile Include="Utils\KeyDownBehaviour.cs" />
     <Compile Include="Utils\StringToColorConverter.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SquareViewModel.cs" />

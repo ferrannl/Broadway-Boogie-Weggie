@@ -12,6 +12,7 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding SetupGalleryDiscCommand}"/>
+        <KeyBinding Key="Space" Command="{Binding PausePlayGalleryCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <!--<Menu DockPanel.Dock="Top">

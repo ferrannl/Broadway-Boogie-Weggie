@@ -15,13 +15,16 @@ namespace Broadway_Boogie_Weggie.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        public bool Running { get; set; }
         public ICommand SetupGalleryDiscCommand { get; set; }
+        public ICommand PausePlayGalleryCommand { get; set; }
         public ObservableCollection<SquareViewModel> Squares { get; set; }
 
         public MainViewModel()
         {
             Squares = new ObservableCollection<SquareViewModel>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
+            PausePlayGalleryCommand = new PausePlayGalleryCommand();
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
 
@@ -42,17 +45,19 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 {
                     Squares.Add(new SquareViewModel(tile));
                 }
-                Squares.Add(new SquareViewModel(new Tile(53, 53, 1, "purple")));
             }
         }
 
         private void UpdateGallery()
         {
-            foreach (var square in Squares.Select(sq => sq.Square))
+            if (Running)
             {
-                if (square is Artist artist)
+                foreach (var square in Squares.Select(sq => sq.Square))
                 {
-                    artist.Step();
+                    if (square is Artist artist)
+                    {
+                        artist.Step();
+                    }
                 }
             }
         }
