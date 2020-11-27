@@ -32,11 +32,16 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding Color}">
+                        <Rectangle Width="{Binding Width,  Converter={StaticResource PositionConverter}}" Height="{Binding Height,  Converter={StaticResource PositionConverter}}" Fill="{Binding Color}">
                             <Rectangle.RenderTransform>
                                 <TranslateTransform X="{Binding GalleryX, Converter={StaticResource PositionConverter}}" Y="{Binding GalleryY, Converter={StaticResource PositionConverter}}"/>
                             </Rectangle.RenderTransform>
                         </Rectangle>
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding IsVisited}" Value="True">
+                                <Setter Property="Stroke" Value="Black"></Setter>
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

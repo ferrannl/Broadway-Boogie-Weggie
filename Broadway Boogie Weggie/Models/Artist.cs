@@ -5,9 +5,9 @@
         public double Vx { get; set; }
         public double Vy { get; set; }
 
-        public override double Width => 800 / 53 / 2;
+        public override double Width => 0.5;
 
-        public override double Height => 800 / 53 / 2;
+        public override double Height => 0.5;
 
         public Artist(double x, double y, double vx, double vy) : base(x, y, "black")
         {

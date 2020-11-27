@@ -4,7 +4,9 @@ using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
 using Broadway_Boogie_Weggie.Readers;
+using Broadway_Boogie_Weggie.Services.Interfaces;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,16 +17,18 @@ namespace Broadway_Boogie_Weggie.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
+        private readonly ICollisionService _collisionService;
         public bool Running { get; set; }
         public ICommand SetupGalleryDiscCommand { get; set; }
         public ICommand PausePlayGalleryCommand { get; set; }
         public ObservableCollection<SquareViewModel> Squares { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(ICollisionService collisionService)
         {
+            _collisionService = collisionService;
             Squares = new ObservableCollection<SquareViewModel>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
-            PausePlayGalleryCommand = new PausePlayGalleryCommand();
+            PausePlayGalleryCommand = new RelayCommand(() => Running ^= true);
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
 
@@ -59,6 +63,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
                         artist.Step();
                     }
                 }
+                _collisionService.CheckCollision(Squares.Select(sq => sq.Square).ToList());
             }
         }
 

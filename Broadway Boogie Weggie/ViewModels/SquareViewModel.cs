@@ -9,6 +9,43 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private double _x;
         private double _y;
         private string _color;
+        private bool _isVisited;
+        private bool _isPath;
+        private bool _isBeginning;
+
+        public bool IsVisited
+        {
+            get => _isVisited; set
+            {
+                if (_isVisited == value)
+                    return;
+                _isVisited = value;
+                RaisePropertyChanged(() => IsVisited);
+            }
+        }
+
+        public bool IsPath
+        {
+            get => _isPath; set
+            {
+                if (_isPath == value)
+                    return;
+                _isPath = value;
+                RaisePropertyChanged(() => IsPath);
+            }
+        }
+
+        public bool IsBeginning
+        {
+            get => _isBeginning; set
+            {
+                if (_isBeginning == value)
+                    return;
+                _isBeginning = value;
+                RaisePropertyChanged(() => IsBeginning);
+            }
+        }
+
         public double GalleryX
         {
             get => _x; set
@@ -55,7 +92,14 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             GalleryX = obj.GalleryX;
             GalleryY = obj.GalleryY;
-            Color = obj.Color;
+            if (obj.IsColliding)
+            {
+                Color = "red";
+            }
+            else
+            {
+                Color = obj.Color;
+            }
         }
     }
 }

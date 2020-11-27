@@ -1,4 +1,6 @@
-﻿using CommonServiceLocator;
+﻿using Broadway_Boogie_Weggie.Services;
+using Broadway_Boogie_Weggie.Services.Interfaces;
+using CommonServiceLocator;
 using GalaSoft.MvvmLight.Ioc;
 
 namespace Broadway_Boogie_Weggie.ViewModels
@@ -8,6 +10,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
+            SimpleIoc.Default.Register<ICollisionService, CollisionService>();
             SimpleIoc.Default.Register<MainViewModel>();
 
         }

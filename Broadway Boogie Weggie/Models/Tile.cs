@@ -8,9 +8,9 @@ namespace Broadway_Boogie_Weggie.Models
 
         public List<Tile> Neighbours { get; }
 
-        public override double Width => 800 / 53;
+        public override double Width => 1;
 
-        public override double Height => 800 / 53;
+        public override double Height => 1;
 
         public Tile(int galleryX, int galleryY, int weight, string color) : base(galleryX, galleryY, color)
         {
