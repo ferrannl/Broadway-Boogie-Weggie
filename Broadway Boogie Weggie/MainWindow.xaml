@@ -9,6 +9,9 @@
         Title="Broadway Boogie Weggie" SizeToContent="WidthAndHeight" DataContext="{Binding Main, Source={StaticResource Locator}}" ResizeMode="NoResize">
     <Window.Resources>
         <converters:GalleryPositionToRenderPositionConverter x:Key="PositionConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:MathConverter x:Key="MathConverter"/>
+        <converters:CombiningConverter x:Key="CombinedConverter" Converter1="{StaticResource MathConverter}" Converter2="{StaticResource PositionConverter}" />
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding SetupGalleryDiscCommand}"/>
@@ -25,23 +28,51 @@
         </Menu>-->
         <Canvas Width="800" Height="800">
             <ItemsControl ItemsSource="{Binding Squares}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Rectangle Width="{Binding Width,  Converter={StaticResource PositionConverter}}" Height="{Binding Height,  Converter={StaticResource PositionConverter}}" Fill="{Binding Color}">
-                            <Rectangle.RenderTransform>
-                                <TranslateTransform X="{Binding GalleryX, Converter={StaticResource PositionConverter}}" Y="{Binding GalleryY, Converter={StaticResource PositionConverter}}"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsVisited}" Value="True">
-                                <Setter Property="Stroke" Value="Black"></Setter>
-                            </DataTrigger>
-                        </DataTemplate.Triggers>
+                        <Canvas>
+                            <Rectangle x:Name="rect" Width="{Binding Width,  Converter={StaticResource PositionConverter}}" Height="{Binding Height,  Converter={StaticResource PositionConverter}}" Fill="{Binding Color}">
+                                <Rectangle.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Select as starting point" 
+                                                  Command="{Binding Main.SelectSquareAsStartingPointCommand, Source={StaticResource Locator}}"
+                                                  CommandParameter="{Binding .}">
+                                            <MenuItem.Style>
+                                                <Style TargetType="{x:Type MenuItem}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Value="True" Binding="{Binding IsSelected }">
+                                                            <Setter Value="False" Property="IsEnabled"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </MenuItem.Style>
+                                        </MenuItem>
+                                        <MenuItem Header="Select as end point" 
+                                                  Visibility="{Binding Main.SelectedPathInitiated, Source={StaticResource Locator}, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                  Command="{Binding Main.SelectSquareAsEndPointCommand, Source={StaticResource Locator}}"
+                                                  CommandParameter="{Binding .}"/>
+                                    </ContextMenu>
+                                </Rectangle.ContextMenu>
+                                <Rectangle.Style>
+                                    <Style TargetType="{x:Type Rectangle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsVisited}" Value="True">
+                                                <Setter Property="Stroke" Value="Black"></Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                                <Rectangle.RenderTransform>
+                                    <TranslateTransform X="{Binding GalleryX, Converter={StaticResource PositionConverter}}" Y="{Binding GalleryY, Converter={StaticResource PositionConverter}}"/>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                            <!--TODO: ConverterIsSelectedToColorConverter-->
+                            <Rectangle Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}" Width="{Binding Width, Converter={StaticResource CombinedConverter}, ConverterParameter=x/2}" Height="{Binding Height, Converter={StaticResource CombinedConverter}, ConverterParameter=x/2}" Canvas.Top="{Binding Height, Converter={StaticResource CombinedConverter}, ConverterParameter=x/4}" Canvas.Left="{Binding Width, Converter={StaticResource CombinedConverter}, ConverterParameter=x/4}" Fill="White">
+                                <Rectangle.RenderTransform>
+                                    <TranslateTransform X="{Binding GalleryX, Converter={StaticResource PositionConverter}}" Y="{Binding GalleryY, Converter={StaticResource PositionConverter}}"/>
+                                </Rectangle.RenderTransform>
+                            </Rectangle>
+                        </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

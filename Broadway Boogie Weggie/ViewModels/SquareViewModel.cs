@@ -11,14 +11,12 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private string _color;
         private bool _isVisited;
         private bool _isPath;
-        private bool _isBeginning;
+        private bool _isSelected;
 
         public bool IsVisited
         {
             get => _isVisited; set
             {
-                if (_isVisited == value)
-                    return;
                 _isVisited = value;
                 RaisePropertyChanged(() => IsVisited);
             }
@@ -28,21 +26,17 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             get => _isPath; set
             {
-                if (_isPath == value)
-                    return;
                 _isPath = value;
                 RaisePropertyChanged(() => IsPath);
             }
         }
 
-        public bool IsBeginning
+        public bool IsSelected
         {
-            get => _isBeginning; set
+            get => _isSelected; set
             {
-                if (_isBeginning == value)
-                    return;
-                _isBeginning = value;
-                RaisePropertyChanged(() => IsBeginning);
+                _isSelected = value;
+                RaisePropertyChanged(() => IsSelected);
             }
         }
 
@@ -92,6 +86,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             GalleryX = obj.GalleryX;
             GalleryY = obj.GalleryY;
+            IsVisited = obj.IsVisited;
             if (obj.IsColliding)
             {
                 Color = "red";

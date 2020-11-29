@@ -59,7 +59,10 @@
     <Compile Include="Builders\GalleryBuilder.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\SetupGalleryDiscCommand.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\CombiningConverter.cs" />
     <Compile Include="Converters\GalleryPositionToRenderPositionConverter.cs" />
+    <Compile Include="Converters\MathConverter.cs" />
     <Compile Include="Factories\ImporterFactory.cs" />
     <Compile Include="Factories\ParserFactory.cs" />
     <Compile Include="Factories\ReaderFactory.cs" />

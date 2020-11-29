@@ -15,7 +15,6 @@ namespace Broadway_Boogie_Weggie.Services
             foreach (var square in squares)
             {
                 square.IsColliding = false;
-                square.IsVisited = true;
             }
             foreach (var square1 in squares)
             {

@@ -18,9 +18,23 @@ namespace Broadway_Boogie_Weggie.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly ICollisionService _collisionService;
+        private bool _selectedPathInitiated;
         public bool Running { get; set; }
+        public bool SelectedPathInitiated
+        {
+            get => _selectedPathInitiated;
+            set
+            {
+                _selectedPathInitiated = value;
+                RaisePropertyChanged(() => SelectedPathInitiated);
+            }
+        }
+        public SquareViewModel SelectedBeginning { get; set; }
+        public SquareViewModel SelectedEnd { get; set; }
         public ICommand SetupGalleryDiscCommand { get; set; }
         public ICommand PausePlayGalleryCommand { get; set; }
+        public ICommand SelectSquareAsStartingPointCommand { get; set; }
+        public ICommand SelectSquareAsEndPointCommand { get; set; }
         public ObservableCollection<SquareViewModel> Squares { get; set; }
 
         public MainViewModel(ICollisionService collisionService)
@@ -28,6 +42,8 @@ namespace Broadway_Boogie_Weggie.ViewModels
             _collisionService = collisionService;
             Squares = new ObservableCollection<SquareViewModel>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
+            SelectSquareAsStartingPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsStartingPoint);
+            SelectSquareAsEndPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsEndPoint);
             PausePlayGalleryCommand = new RelayCommand(() => Running ^= true);
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
@@ -50,6 +66,26 @@ namespace Broadway_Boogie_Weggie.ViewModels
                     Squares.Add(new SquareViewModel(tile));
                 }
             }
+        }
+
+        private void SelectSquareAsStartingPoint(SquareViewModel squareViewModel)
+        {
+            if (SelectedBeginning != null)
+            {
+                SelectedBeginning.IsSelected = false;
+            }
+            SelectedPathInitiated = true;
+            SelectedBeginning = squareViewModel;
+            squareViewModel.IsSelected = true;
+        }
+        private void SelectSquareAsEndPoint(SquareViewModel squareViewModel)
+        {
+            if (SelectedEnd != null)
+            {
+                SelectedEnd.IsSelected = false;
+            }
+            SelectedEnd = squareViewModel;
+            squareViewModel.IsSelected = true;
         }
 
         private void UpdateGallery()

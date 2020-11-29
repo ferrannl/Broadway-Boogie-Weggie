@@ -12,15 +12,12 @@ namespace Broadway_Boogie_Weggie.Models
         private bool _isColliding;
         private bool _isVisited;
         private bool _isPath;
-        private bool _isBeginning;
 
         public bool IsColliding
         {
             get => _isColliding;
             set
             {
-                if (_isColliding == value)
-                    return;
                 _isColliding = value;
                 Notify();
             }
@@ -31,8 +28,6 @@ namespace Broadway_Boogie_Weggie.Models
             get => _isVisited;
             set
             {
-                if (_isVisited == value)
-                    return;
                 _isVisited = value;
                 Notify();
             }
@@ -43,25 +38,10 @@ namespace Broadway_Boogie_Weggie.Models
             get => _isPath;
             set
             {
-                if (_isPath == value)
-                    return;
                 _isPath = value;
                 Notify();
             }
         }
-
-        public bool IsBeginning
-        {
-            get => _isBeginning;
-            set
-            {
-                if (_isBeginning == value)
-                    return;
-                _isBeginning = value;
-                Notify();
-            }
-        }
-
 
         public double GalleryX
         {
