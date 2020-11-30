@@ -77,6 +77,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
 
         private void SelectSquareAsStartingPoint(SquareViewModel squareViewModel)
         {
+            _algorithmService.ResetAlgorithm(Squares.Select(s => s.Square));
             if (SelectedBeginning != null)
             {
                 SelectedBeginning.IsSelected = false;
@@ -95,13 +96,19 @@ namespace Broadway_Boogie_Weggie.ViewModels
             if (SelectedEnd != null)
             {
                 SelectedEnd.IsSelected = false;
+                _algorithmService.ResetAlgorithm(Squares.Select(s => s.Square));
             }
             SelectedEnd = squareViewModel;
             squareViewModel.IsSelected = true;
 
             if (UseBfsAlgorithm)
             {
-                _algorithmService.GetShortestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile, Squares.Select(s => s.Square).OfType<Tile>());
+                var shortestPath = _algorithmService.GetShortestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
+                foreach (var tile in shortestPath)
+                {
+                    tile.IsPath = true;
+                }
+
             }
             else
             {

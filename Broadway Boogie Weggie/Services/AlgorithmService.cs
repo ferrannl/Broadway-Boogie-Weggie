@@ -15,36 +15,61 @@ namespace Broadway_Boogie_Weggie.Services
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Square> GetShortestPath(Tile start, Tile end, IEnumerable<Tile> tiles)
+        public void ResetAlgorithm(IEnumerable<Square> squares)
+        {
+            foreach (var square in squares)
+            {
+                square.IsPath = false;
+                square.IsVisited = false;
+            }
+        }
+
+        public IEnumerable<Square> GetShortestPath(Tile start, Tile end)
         {
             if (start == null || end == null)
             {
                 throw new ArgumentNullException();
             }
-            var visited = new List<Tile>();
+            var visited = new Dictionary<Tile, Tile>();
             var queue = new Queue<Tile>();
             queue.Enqueue(start);
-            start.IsVisited = true;
             while (queue.Count > 0)
             {
                 var tile = queue.Dequeue();
-
-                visited.Add(tile);
-
+                tile.IsVisited = true;
                 foreach (var neighbor in tile.Neighbours)
                 {
+                    if (neighbor.IsVisited)
+                    {
+                        continue;
+                    }
+                    queue.Enqueue(neighbor);
                     neighbor.IsVisited = true;
+
+                    visited.Add(neighbor, tile);
                     if (neighbor == end)
                     {
                         queue.Clear();
                         break;
                     }
-                    //Check dat een neighbour niet al is bezocht.
-                    if (!visited.Contains(neighbor))
-                        queue.Enqueue(neighbor);
+
                 }
             }
-            return visited;
+            return ReconstructPath(start, end, visited);
+        }
+
+        private IEnumerable<Tile> ReconstructPath(Tile start, Tile end, IDictionary<Tile, Tile> visitedEdges)
+        {
+            List<Tile> path = new List<Tile>();
+            var current = end;
+            path.Add(current);
+            while (current != start)
+            {
+                path.Add(visitedEdges[current]);
+                current = visitedEdges[current];
+            }
+            path.Reverse();
+            return path;
         }
     }
 }

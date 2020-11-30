@@ -13,7 +13,9 @@ namespace Broadway_Boogie_Weggie.Services.Interfaces
         /// Lijst van Squares
         /// </summary>
         /// <returns>Entire path in the form of an ordened list, starting with begin point, ending with end point</returns>
-        IEnumerable<Square> GetShortestPath(Tile start, Tile end, IEnumerable<Tile> tiles);
+
+        void ResetAlgorithm(IEnumerable<Square> squares);
+        IEnumerable<Square> GetShortestPath(Tile start, Tile end);
         IEnumerable<Square> GetCheapestPath();
     }
 }
