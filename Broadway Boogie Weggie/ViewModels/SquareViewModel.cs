@@ -87,6 +87,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
             GalleryX = obj.GalleryX;
             GalleryY = obj.GalleryY;
             IsVisited = obj.IsVisited;
+            IsPath = obj.IsPath;
             if (obj.IsColliding)
             {
                 Color = "red";

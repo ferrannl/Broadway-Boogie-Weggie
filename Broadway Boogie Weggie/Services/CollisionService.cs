@@ -16,21 +16,22 @@ namespace Broadway_Boogie_Weggie.Services
             {
                 square.IsColliding = false;
             }
-            foreach (var square1 in squares)
+            foreach (var artist in squares.OfType<Artist>())
             {
-                if (square1 is Artist)
+                foreach (var square in squares)
                 {
-                    foreach (var square2 in squares)
+                    if (artist != square && (square is Artist || square.IsPath))
                     {
-                        if (square1 != square2 && square2 is Artist)
+                        if (artist.GalleryX < square.GalleryX + square.Width &&
+                           artist.GalleryX + artist.Width > square.GalleryX &&
+                           artist.GalleryY < square.GalleryY + square.Height &&
+                           artist.GalleryY + artist.Height > square.GalleryY)
                         {
-                            if (square1.GalleryX < square2.GalleryX + square2.Width &&
-                               square1.GalleryX + square1.Width > square2.GalleryX &&
-                               square1.GalleryY < square2.GalleryY + square2.Height &&
-                               square1.GalleryY + square1.Height > square2.GalleryY)
+
+                            artist.IsColliding = true;
+                            if (!square.IsPath)
                             {
-                                square1.IsColliding = true;
-                                square2.IsColliding = true;
+                                square.IsColliding = true;
                             }
                         }
                     }

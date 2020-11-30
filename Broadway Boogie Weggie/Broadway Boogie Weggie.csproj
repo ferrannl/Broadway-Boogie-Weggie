@@ -78,7 +78,9 @@
     <Compile Include="Parsers\XmlParser.cs" />
     <Compile Include="Readers\IReader.cs" />
     <Compile Include="Readers\DiscReader.cs" />
+    <Compile Include="Services\AlgorithmService.cs" />
     <Compile Include="Services\CollisionService.cs" />
+    <Compile Include="Services\Interfaces\IAlgorithmService.cs" />
     <Compile Include="Services\Interfaces\ICollisionService.cs" />
     <Compile Include="Utils\KeyDownBehaviour.cs" />
     <Compile Include="Utils\StringToColorConverter.cs" />

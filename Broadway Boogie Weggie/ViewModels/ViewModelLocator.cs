@@ -11,6 +11,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SimpleIoc.Default.Register<ICollisionService, CollisionService>();
+            SimpleIoc.Default.Register<IAlgorithmService, AlgorithmService>();
             SimpleIoc.Default.Register<MainViewModel>();
 
         }

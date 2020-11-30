@@ -60,7 +60,7 @@ namespace Broadway_Boogie_Weggie.Parsers
                 {
                     XmlNode xmlTile = xnList[i];
                     Tile tile = tileList[i];
-                    //tile.neighbours.AddRange(GetNeighbours(xmlTile));
+                    tile.Neighbours.AddRange(GetNeighbours(xmlTile));
                 }
                 return tileList;
             }

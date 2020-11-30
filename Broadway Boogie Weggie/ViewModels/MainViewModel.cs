@@ -7,6 +7,7 @@ using Broadway_Boogie_Weggie.Readers;
 using Broadway_Boogie_Weggie.Services.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,7 +19,9 @@ namespace Broadway_Boogie_Weggie.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly ICollisionService _collisionService;
+        private readonly IAlgorithmService _algorithmService;
         private bool _selectedPathInitiated;
+        public bool UseBfsAlgorithm { get; set; }
         public bool Running { get; set; }
         public bool SelectedPathInitiated
         {
@@ -35,19 +38,23 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public ICommand PausePlayGalleryCommand { get; set; }
         public ICommand SelectSquareAsStartingPointCommand { get; set; }
         public ICommand SelectSquareAsEndPointCommand { get; set; }
+        public ICommand ToggleAlgorithmCommand { get; set; }
+
         public ObservableCollection<SquareViewModel> Squares { get; set; }
 
-        public MainViewModel(ICollisionService collisionService)
+        public MainViewModel(ICollisionService collisionService, IAlgorithmService algorithmService)
         {
-            _collisionService = collisionService;
+            UseBfsAlgorithm = true;
+            this._collisionService = collisionService;
+            this._algorithmService = algorithmService;
             Squares = new ObservableCollection<SquareViewModel>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
             SelectSquareAsStartingPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsStartingPoint);
             SelectSquareAsEndPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsEndPoint);
+            ToggleAlgorithmCommand = new RelayCommand(() => UseBfsAlgorithm ^= true);
             PausePlayGalleryCommand = new RelayCommand(() => Running ^= true);
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
-
         public void SetupGallery(string importType)
         {
             string filePath = Import(importType);
@@ -74,6 +81,11 @@ namespace Broadway_Boogie_Weggie.ViewModels
             {
                 SelectedBeginning.IsSelected = false;
             }
+            if (SelectedEnd != null)
+            {
+                SelectedEnd.IsSelected = false;
+                SelectedEnd = null;
+            }
             SelectedPathInitiated = true;
             SelectedBeginning = squareViewModel;
             squareViewModel.IsSelected = true;
@@ -86,6 +98,15 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
             SelectedEnd = squareViewModel;
             squareViewModel.IsSelected = true;
+
+            if (UseBfsAlgorithm)
+            {
+                _algorithmService.GetShortestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile, Squares.Select(s => s.Square).OfType<Tile>());
+            }
+            else
+            {
+                _algorithmService.GetCheapestPath();
+            }
         }
 
         private void UpdateGallery()
