@@ -9,6 +9,6 @@ namespace Broadway_Boogie_Weggie.Services.Interfaces
 {
     public interface ICollisionService
     {
-        void CheckCollision(ICollection<Square> squares);
+        void CheckCollision(ICollection<Square> squares, bool CollisionWithPath);
     }
 }

@@ -10,7 +10,7 @@ namespace Broadway_Boogie_Weggie.Services
 {
     public class CollisionService : ICollisionService
     {
-        public void CheckCollision(ICollection<Square> squares)
+        public void CheckCollision(ICollection<Square> squares, bool CollisionWithPath)
         {
             foreach (var square in squares)
             {
@@ -29,7 +29,7 @@ namespace Broadway_Boogie_Weggie.Services
                         {
 
                             artist.IsColliding = true;
-                            if (!square.IsPath)
+                            if (!square.IsPath && CollisionWithPath)
                             {
                                 square.IsColliding = true;
                             }

@@ -127,7 +127,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
                         artist.Step();
                     }
                 }
-                _collisionService.CheckCollision(Squares.Select(sq => sq.Square).ToList());
+                _collisionService.CheckCollision(Squares.Select(sq => sq.Square).ToList(), true);
             }
         }
 
