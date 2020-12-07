@@ -16,6 +16,6 @@ namespace Broadway_Boogie_Weggie.Services.Interfaces
 
         void ResetAlgorithm(IEnumerable<Square> squares);
         IEnumerable<Square> GetShortestPath(Tile start, Tile end);
-        IEnumerable<Square> GetCheapestPath();
+        IEnumerable<Square> GetCheapestPath(Tile start, Tile end);
     }
 }

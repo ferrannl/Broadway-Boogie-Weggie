@@ -10,11 +10,6 @@ namespace Broadway_Boogie_Weggie.Services
 {
     public class AlgorithmService : IAlgorithmService
     {
-        public IEnumerable<Square> GetCheapestPath()
-        {
-            throw new NotImplementedException();
-        }
-
         public void ResetAlgorithm(IEnumerable<Square> squares)
         {
             foreach (var square in squares)
@@ -57,7 +52,6 @@ namespace Broadway_Boogie_Weggie.Services
             }
             return ReconstructPath(start, end, visited);
         }
-
         private IEnumerable<Tile> ReconstructPath(Tile start, Tile end, IDictionary<Tile, Tile> visitedEdges)
         {
             List<Tile> path = new List<Tile>();
@@ -70,6 +64,34 @@ namespace Broadway_Boogie_Weggie.Services
             }
             path.Reverse();
             return path;
+        }
+
+        public IEnumerable<Square> GetCheapestPath(Tile start, Tile end)
+        {
+            throw new NotImplementedException();
+        }
+
+        private Dictionary<Tile, Tile> Dijkstra(Tile start, Tile end)
+        {
+            var nearestToStart = new Dictionary<Tile, Tile>();
+            var distanceTo = new Dictionary<Tile, int>();
+            distanceTo.Add(start, 0);
+            var priorityQueue = new Queue<Tile>();
+            priorityQueue.Enqueue(start);
+            while (priorityQueue.Count > 0)
+            {
+                priorityQueue = new Queue<Tile>(priorityQueue.OrderBy(tile => distanceTo[tile]));
+                var previous = priorityQueue.ElementAt(0);
+                foreach (var neighbour in priorityQueue.ElementAt(0).Neighbours)
+                {
+                    int weight = neighbour.Weight + distanceTo[previous];
+                    distanceTo.Add(neighbour, weight);
+                }
+
+            }
+
+
+            return nearestToStart;
         }
     }
 }

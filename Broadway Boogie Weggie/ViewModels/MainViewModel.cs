@@ -112,7 +112,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
             else
             {
-                _algorithmService.GetCheapestPath();
+                //_algorithmService.GetCheapestPath();
             }
         }
 
