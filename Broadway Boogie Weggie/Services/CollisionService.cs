@@ -39,8 +39,11 @@ namespace Broadway_Boogie_Weggie.Services
             }
         }
 
-        //TODO
-        //CheckCollisionQuadTree
+        public void CheckCollisionQuadTree(ICollection<Square> squares, bool CollisionWithPath)
+        {
+            //QuadTree rootQuadTree = new QuadTree();
+
+        }
 
     }
 }

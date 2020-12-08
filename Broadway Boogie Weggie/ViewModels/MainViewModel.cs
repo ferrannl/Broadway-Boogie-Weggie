@@ -44,7 +44,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
 
         public MainViewModel(ICollisionService collisionService, IAlgorithmService algorithmService)
         {
-            UseBfsAlgorithm = true;
+            UseBfsAlgorithm = false;
             this._collisionService = collisionService;
             this._algorithmService = algorithmService;
             Squares = new ObservableCollection<SquareViewModel>();
@@ -112,7 +112,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
             else
             {
-                //_algorithmService.GetCheapestPath();
+                _algorithmService.GetCheapestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
             }
         }
 

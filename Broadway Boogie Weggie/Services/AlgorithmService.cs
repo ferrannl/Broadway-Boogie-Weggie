@@ -68,7 +68,8 @@ namespace Broadway_Boogie_Weggie.Services
 
         public IEnumerable<Square> GetCheapestPath(Tile start, Tile end)
         {
-            throw new NotImplementedException();
+            var nearestToStart = Dijkstra(start, end);
+            return null;
         }
 
         private Dictionary<Tile, Tile> Dijkstra(Tile start, Tile end)
@@ -81,16 +82,26 @@ namespace Broadway_Boogie_Weggie.Services
             while (priorityQueue.Count > 0)
             {
                 priorityQueue = new Queue<Tile>(priorityQueue.OrderBy(tile => distanceTo[tile]));
-                var previous = priorityQueue.ElementAt(0);
-                foreach (var neighbour in priorityQueue.ElementAt(0).Neighbours)
+                var previous = priorityQueue.Dequeue();
+                if (previous == end)
                 {
-                    int weight = neighbour.Weight + distanceTo[previous];
-                    distanceTo.Add(neighbour, weight);
+                    return nearestToStart;
+                }
+                foreach (var neighbour in previous.Neighbours.OrderBy(tile => tile.Weight))
+                {
+                    var distanceToNeigbour = distanceTo[previous] + neighbour.Weight;
+                    if (!neighbour.IsVisited || distanceToNeigbour < distanceTo[neighbour])
+                    {
+
+                        distanceTo[neighbour] = distanceToNeigbour;
+                        nearestToStart[neighbour] = previous;
+                        priorityQueue.Enqueue(neighbour);
+                    }
+
+                    neighbour.IsVisited = true;
                 }
 
             }
-
-
             return nearestToStart;
         }
     }
