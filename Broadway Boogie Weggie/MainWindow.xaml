@@ -15,18 +15,20 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="O" Command="{Binding SetupGalleryDiscCommand}"/>
-        <KeyBinding Key="D" Command="{Binding ToggleAlgorithmCommand}"/>
         <KeyBinding Key="Space" Command="{Binding PausePlayGalleryCommand}"/>
+        <KeyBinding Key="C" Command="{Binding ToggleCollisionMethodCommand}"/>
+        <KeyBinding Key="Q" Command="{Binding ToggleQuadTreeCommand}"/>
+        <KeyBinding Key="A" Command="{Binding ToggleArtistsCommand}"/>
+        <KeyBinding Key="W" Command="{Binding TogglePathCollisionCommand}"/>
+        <KeyBinding Key="D" Command="{Binding ToggleAlgorithmCommand}"/>
+        <KeyBinding Key="P" Command="{Binding TogglePathCommand}"/>
+        <KeyBinding Key="V" Command="{Binding ToggleVisitedCommand}"/>
     </Window.InputBindings>
     <DockPanel>
-        <!--<Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="Disc" Command="{Binding SetupGalleryDiscCommand}"/>
-            </MenuItem>
-            <MenuItem Header="_Instellingen">
-                    <MenuItem Header="Configureer sneltoetsen" Command="{Binding OpenShortcutsCommand}"/>
-                </MenuItem>
-        </Menu>-->
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock Text="{Binding UseBfsAlgorithm, StringFormat=Shortest: {0}}"  Margin="10"/>
+            <TextBlock Text="{Binding UseQuadTree, StringFormat=QuadTree: {0}}" Margin="10"/>
+        </StackPanel>
         <Canvas Width="800" Height="800">
             <ItemsControl ItemsSource="{Binding Squares}">
                 <ItemsControl.ItemTemplate>

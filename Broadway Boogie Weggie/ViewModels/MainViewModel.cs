@@ -21,8 +21,32 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private readonly ICollisionService _collisionService;
         private readonly IAlgorithmService _algorithmService;
         private bool _selectedPathInitiated;
-        public bool UseBfsAlgorithm { get; set; }
-        public bool Running { get; set; }
+        private bool _useBfsAlgorithm;
+        private bool _useQuadTree;
+        private bool _usePathCollision;
+        private bool _showQuadTree;
+        private bool _showArtists;
+        private bool _showPath;
+        private bool _showVisited;
+        private bool _running { get; set; }
+        public bool UseBfsAlgorithm
+        {
+            get => _useBfsAlgorithm;
+            set
+            {
+                _useBfsAlgorithm = value;
+                RaisePropertyChanged(() => UseBfsAlgorithm);
+            }
+        }
+        public bool UseQuadTree
+        {
+            get => _useQuadTree;
+            set
+            {
+                _useQuadTree = value;
+                RaisePropertyChanged(() => UseQuadTree);
+            }
+        }
         public bool SelectedPathInitiated
         {
             get => _selectedPathInitiated;
@@ -32,6 +56,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 RaisePropertyChanged(() => SelectedPathInitiated);
             }
         }
+        #region
         public SquareViewModel SelectedBeginning { get; set; }
         public SquareViewModel SelectedEnd { get; set; }
         public ICommand SetupGalleryDiscCommand { get; set; }
@@ -39,6 +64,13 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public ICommand SelectSquareAsStartingPointCommand { get; set; }
         public ICommand SelectSquareAsEndPointCommand { get; set; }
         public ICommand ToggleAlgorithmCommand { get; set; }
+        public ICommand ToggleCollisionMethodCommand { get; set; }
+        public ICommand ToggleQuadTreeCommand { get; set; }
+        public ICommand ToggleArtistsCommand { get; set; }
+        public ICommand TogglePathCollisionCommand { get; set; }
+        public ICommand TogglePathCommand { get; set; }
+        public ICommand ToggleVisitedCommand { get; set; }
+        #endregion
 
         public ObservableCollection<SquareViewModel> Squares { get; set; }
 
@@ -52,7 +84,13 @@ namespace Broadway_Boogie_Weggie.ViewModels
             SelectSquareAsStartingPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsStartingPoint);
             SelectSquareAsEndPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsEndPoint);
             ToggleAlgorithmCommand = new RelayCommand(() => UseBfsAlgorithm ^= true);
-            PausePlayGalleryCommand = new RelayCommand(() => Running ^= true);
+            ToggleCollisionMethodCommand = new RelayCommand(() => UseQuadTree ^= true);
+            PausePlayGalleryCommand = new RelayCommand(() => _running ^= true);
+            ToggleQuadTreeCommand = new RelayCommand(() => _useQuadTree ^= true);
+            ToggleArtistsCommand = new RelayCommand(() => _showArtists ^= true);
+            TogglePathCollisionCommand = new RelayCommand(() => _usePathCollision ^= true);
+            TogglePathCommand = new RelayCommand(() => _showPath ^= true);
+            ToggleVisitedCommand = new RelayCommand(() => _showVisited ^= true);
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
         public void SetupGallery(string importType)
@@ -121,7 +159,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
 
         private void UpdateGallery()
         {
-            if (Running)
+            if (_running)
             {
                 foreach (var square in Squares.Select(sq => sq.Square))
                 {
