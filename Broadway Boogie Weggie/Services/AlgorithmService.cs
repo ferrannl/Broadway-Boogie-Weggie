@@ -69,7 +69,7 @@ namespace Broadway_Boogie_Weggie.Services
         public IEnumerable<Square> GetCheapestPath(Tile start, Tile end)
         {
             var nearestToStart = Dijkstra(start, end);
-            return null;
+            return ReconstructPath(start, end, nearestToStart);
         }
 
         private Dictionary<Tile, Tile> Dijkstra(Tile start, Tile end)

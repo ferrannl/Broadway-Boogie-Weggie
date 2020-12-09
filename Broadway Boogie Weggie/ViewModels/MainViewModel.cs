@@ -99,20 +99,23 @@ namespace Broadway_Boogie_Weggie.ViewModels
                 _algorithmService.ResetAlgorithm(Squares.Select(s => s.Square));
             }
             SelectedEnd = squareViewModel;
-            squareViewModel.IsSelected = true;
-
+            IEnumerable<Square> path;
             if (UseBfsAlgorithm)
             {
-                var shortestPath = _algorithmService.GetShortestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
-                foreach (var tile in shortestPath)
-                {
-                    tile.IsPath = true;
-                }
-
+                path = _algorithmService.GetShortestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
             }
             else
             {
-                _algorithmService.GetCheapestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
+                path = _algorithmService.GetCheapestPath(SelectedBeginning.Square as Tile, SelectedEnd.Square as Tile);
+            }
+            HighlightPath(path);
+        }
+
+        private void HighlightPath(IEnumerable<Square> squares)
+        {
+            foreach (var square in squares)
+            {
+                square.IsPath = true;
             }
         }
 
