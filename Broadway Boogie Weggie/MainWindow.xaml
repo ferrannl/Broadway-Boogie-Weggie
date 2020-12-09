@@ -58,10 +58,16 @@
                                 </Rectangle.ContextMenu>
                                 <Rectangle.Style>
                                     <Style TargetType="{x:Type Rectangle}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsVisited}" Value="True">
-                                                <Setter Property="Stroke" Value="Black"></Setter>
-                                            </DataTrigger>
+                                        <Style.Triggers >
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsVisited}" Value="True"/>
+                                                    <Condition Binding="{Binding Main.ShowVisited, Source={StaticResource Locator}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Stroke" Value="Black"></Setter>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Rectangle.Style>
@@ -78,9 +84,15 @@
                                         <Setter Property="Fill" Value="Black"/>
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsPath}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsPath}" Value="True"/>
+                                                    <Condition Binding="{Binding Main.ShowPath, Source={StaticResource Locator}}" Value="True" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                                 <Setter Property="Fill" Value="White"/>
                                                 <Setter Property="Visibility" Value="Visible"/>

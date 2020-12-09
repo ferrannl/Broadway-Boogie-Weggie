@@ -23,12 +23,32 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private bool _selectedPathInitiated;
         private bool _useBfsAlgorithm;
         private bool _useQuadTree;
-        private bool _usePathCollision;
-        private bool _showQuadTree;
-        private bool _showArtists;
         private bool _showPath;
         private bool _showVisited;
+        public bool UsePathCollision { get; set; }
+        public bool ShowArtists { get; set; }
+        public bool ShowPath
+        {
+            get => _showPath;
+            set
+            {
+                _showPath = value;
+                RaisePropertyChanged(() => ShowPath);
+            }
+        }
+
         private bool _running { get; set; }
+        public bool ShowVisited
+        {
+            get => _showVisited;
+            set
+            {
+                _showVisited = value;
+                RaisePropertyChanged(() => ShowVisited);
+            }
+        }
+
+        public bool ShowQuadTree { get; private set; }
         public bool UseBfsAlgorithm
         {
             get => _useBfsAlgorithm;
@@ -77,6 +97,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         public MainViewModel(ICollisionService collisionService, IAlgorithmService algorithmService)
         {
             UseBfsAlgorithm = false;
+            ShowVisited = true;
             this._collisionService = collisionService;
             this._algorithmService = algorithmService;
             Squares = new ObservableCollection<SquareViewModel>();
@@ -86,11 +107,11 @@ namespace Broadway_Boogie_Weggie.ViewModels
             ToggleAlgorithmCommand = new RelayCommand(() => UseBfsAlgorithm ^= true);
             ToggleCollisionMethodCommand = new RelayCommand(() => UseQuadTree ^= true);
             PausePlayGalleryCommand = new RelayCommand(() => _running ^= true);
-            ToggleQuadTreeCommand = new RelayCommand(() => _useQuadTree ^= true);
-            ToggleArtistsCommand = new RelayCommand(() => _showArtists ^= true);
-            TogglePathCollisionCommand = new RelayCommand(() => _usePathCollision ^= true);
-            TogglePathCommand = new RelayCommand(() => _showPath ^= true);
-            ToggleVisitedCommand = new RelayCommand(() => _showVisited ^= true);
+            ToggleQuadTreeCommand = new RelayCommand(() => ShowQuadTree ^= true);
+            ToggleArtistsCommand = new RelayCommand(() => ShowArtists ^= true);
+            TogglePathCollisionCommand = new RelayCommand(() => UsePathCollision ^= true);
+            TogglePathCommand = new RelayCommand(() => ShowPath ^= true);
+            ToggleVisitedCommand = new RelayCommand(() => ShowVisited ^= true);
             CompositionTarget.Rendering += (s, e) => UpdateGallery();
         }
         public void SetupGallery(string importType)
