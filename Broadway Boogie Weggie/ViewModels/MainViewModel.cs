@@ -4,6 +4,7 @@ using Broadway_Boogie_Weggie.Importers;
 using Broadway_Boogie_Weggie.Models;
 using Broadway_Boogie_Weggie.Parsers;
 using Broadway_Boogie_Weggie.Readers;
+using Broadway_Boogie_Weggie.Services;
 using Broadway_Boogie_Weggie.Services.Interfaces;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -25,6 +26,7 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private bool _useQuadTree;
         private bool _showPath;
         private bool _showVisited;
+        public ObservableCollection<Boundry> RenderQuadTreeBoundries { get; set; }
         public bool UsePathCollision { get; set; }
         public bool ShowArtists { get; set; }
         public bool ShowPath
@@ -101,13 +103,14 @@ namespace Broadway_Boogie_Weggie.ViewModels
             this._collisionService = collisionService;
             this._algorithmService = algorithmService;
             Squares = new ObservableCollection<SquareViewModel>();
+            RenderQuadTreeBoundries = new ObservableCollection<Boundry>();
             SetupGalleryDiscCommand = new SetupGalleryDiscCommand();
             SelectSquareAsStartingPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsStartingPoint);
             SelectSquareAsEndPointCommand = new RelayCommand<SquareViewModel>(SelectSquareAsEndPoint);
             ToggleAlgorithmCommand = new RelayCommand(() => UseBfsAlgorithm ^= true);
             ToggleCollisionMethodCommand = new RelayCommand(() => UseQuadTree ^= true);
             PausePlayGalleryCommand = new RelayCommand(() => _running ^= true);
-            ToggleQuadTreeCommand = new RelayCommand(() => ShowQuadTree ^= true);
+            ToggleQuadTreeCommand = new RelayCommand(() => { if (UseQuadTree) { ShowQuadTree ^= true; } });
             ToggleArtistsCommand = new RelayCommand(() => ShowArtists ^= true);
             TogglePathCollisionCommand = new RelayCommand(() => UsePathCollision ^= true);
             TogglePathCommand = new RelayCommand(() => ShowPath ^= true);
@@ -189,7 +192,19 @@ namespace Broadway_Boogie_Weggie.ViewModels
                         artist.Step();
                     }
                 }
-                _collisionService.CheckCollision(Squares.Select(sq => sq.Square).ToList(), true);
+                _collisionService.CheckCollision(Squares.Select(sq => sq.Square).ToList(), UsePathCollision, UseQuadTree);
+                if (ShowQuadTree)
+                {
+                    RenderQuadTreeBoundries.Clear();
+                    foreach (var item in _algorithmService.GetBoundries())
+                    {
+                        RenderQuadTreeBoundries.Add(item);
+                    }
+                }
+                else
+                {
+                    RenderQuadTreeBoundries.Clear();
+                }
             }
         }
 

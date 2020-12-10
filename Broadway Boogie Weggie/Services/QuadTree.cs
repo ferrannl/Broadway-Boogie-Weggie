@@ -1,195 +1,127 @@
-﻿using Broadway_Boogie_Weggie.Services.Interfaces;
-using System;
+﻿using Broadway_Boogie_Weggie.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Broadway_Boogie_Weggie.Services
 {
-    public interface IQuadTree<T> where T : IQuadNode
+    public class QuadTree
     {
-        int Depth();
-        IEnumerable<IQuadNode> QueryRange(Boundry range);
-        IEnumerable<T> DetectCollision(IOnCollisionDetection<T> strategy);
-        void Insert(T entity);
-        IEnumerable<Boundry> GetBoundries();
-    }
+        private const int MAX_SPLIT_AMOUNT = 5;
+        private const int MAX_CAPACITY = 4;
+        private const int QUADTREE_CHILDS = 4;
+        private Boundry boundry;
+        private readonly List<Artist> _artists;
+        private readonly List<QuadTree> _quadTreeChilds;
+        private bool _needsSplitting => _artists.Count > MAX_CAPACITY && _currentDepth < MAX_SPLIT_AMOUNT;
+        private int _currentDepth;
+        public bool IsSplitted => _quadTreeChilds.Count() > 0;
+        public IEnumerable<Artist> Content => _artists;
 
-    public class QuadTree<T> : IQuadTree<T> where T : IQuadNode
-    {
-        private static int MAX_DEPTH = 8;
-
-        private int _node_capacity = 4;
-        private int numerOfItems = 0;
-        public int NumberOfItems => numerOfItems;
-        private T[] entities;
-
-        public Boundry Boundry { get; private set; }
-        public QuadTree<T> NorthWest { get; private set; }
-        public QuadTree<T> NorthEast { get; private set; }
-        public QuadTree<T> SouthWest { get; private set; }
-        public QuadTree<T> SouthEast { get; private set; }
-
-        public QuadTree(Boundry b)
+        public QuadTree(int depth, double x, double y, double height, double width)
         {
-            this.Boundry = b;
-            entities = new T[_node_capacity];
+            _artists = new List<Artist>(MAX_CAPACITY);
+            _quadTreeChilds = new List<QuadTree>(QUADTREE_CHILDS);
+            _currentDepth = depth;
+            boundry = new Boundry() { X = x, Y = y, Height = height, Width = width };
         }
 
-        private int depth = 1;
-        public QuadTree(int depth, Boundry b)
+        public void Insert(Artist artist)
         {
-            this.depth = depth;
-            this.Boundry = b;
-            entities = new T[_node_capacity];
-        }
-
-        private void subDivide()
-        {
-            var halfY = (Boundry.MaxY + Boundry.MinY) / 2;
-            var halfX = (Boundry.MaxX + Boundry.MinX) / 2;
-
-            this.NorthEast = new QuadTree<T>(depth + 1, new Boundry(halfX, halfY, Boundry.MaxX, Boundry.MaxY));
-            this.NorthWest = new QuadTree<T>(depth + 1, new Boundry(Boundry.MinX, halfY, halfX, Boundry.MaxY));
-            this.SouthWest = new QuadTree<T>(depth + 1, new Boundry(Boundry.MinX, Boundry.MinY, halfX, halfY));
-            this.SouthEast = new QuadTree<T>(depth + 1, new Boundry(halfX, Boundry.MinY, Boundry.MaxX, halfY));
-        }
-
-        public int Depth()
-        {
-            if (this.NorthEast != null)
+            if (IsSplitted)
             {
-                var nwD = NorthWest.Depth();
-                var neD = NorthEast.Depth();
-                var swD = SouthWest.Depth();
-                var seD = SouthEast.Depth();
-
-                if (nwD >= neD && nwD >= swD && nwD >= seD) return nwD + 1;
-                if (neD >= nwD && neD >= swD && neD >= seD) return neD + 1;
-                if (swD >= neD && swD >= nwD && swD >= seD) return swD + 1;
-                if (seD >= neD && seD >= swD && seD >= nwD) return seD + 1;
+                _quadTreeChilds[GetQuadTreeIndex(artist)].Insert(artist);
+                return;
             }
-            return 1;
-        }
 
-        private int getDepth() => depth;
-
-        public IEnumerable<IQuadNode> QueryRange(Boundry range)
-        {
-            // RsultArray
-            List<IQuadNode> retList = new List<IQuadNode>();
-
-            // Does not instersect with this quad
-            if (!this.Boundry.Intersects(range))
-                return retList;
-
-            // Add entities and return, this is lowest level element
-            if (this.NorthEast == null)
+            _artists.Add(artist);
+            if (_needsSplitting)
             {
-                for (int p = 0; p < this.entities.Length; p++)
+                Split();
+                foreach (var item in this._artists)
                 {
-                    // Check entity in range
-                    if (range.ContainsPoint(entities[p]))
-                        retList.Add(entities[p]);
+                    _quadTreeChilds[GetQuadTreeIndex(artist)].Insert(artist);
                 }
-                return retList;
+                _artists.Clear();
             }
-
-            // Ask children for points
-            retList.AddRange(this.NorthWest.QueryRange(range));
-            retList.AddRange(this.NorthEast.QueryRange(range));
-            retList.AddRange(this.SouthWest.QueryRange(range));
-            retList.AddRange(this.SouthEast.QueryRange(range));
-
-            return retList;
         }
 
-        public IEnumerable<T> DetectCollision(IOnCollisionDetection<T> strategy)
+        private int GetQuadTreeIndex(Artist artist)
         {
-            var retList = new List<T>();
-            // No childs
-            if (NorthEast == null)
+            bool isTop = (ToRenderPosition(artist.GalleryY) < boundry.Height / 2);
+            bool isBottom = (ToRenderPosition(artist.GalleryY) > boundry.Height / 2);
+            bool isLeft = (ToRenderPosition(artist.GalleryX) < boundry.Width / 2);
+            bool isRight = (ToRenderPosition(artist.GalleryX) > boundry.Width / 2);
+            if (isTop && isLeft)
             {
-                retList.AddRange(strategy.DetectCollision(entities));
+                return 0;
             }
-            // Append child returns
+            if (isTop && isRight)
+            {
+                return 1;
+            }
+            if (isBottom && isLeft)
+            {
+                return 2;
+            }
+            if (isBottom && isRight)
+            {
+                return 3;
+            }
             else
             {
-                retList.AddRange(NorthWest.DetectCollision(strategy));
-                retList.AddRange(NorthEast.DetectCollision(strategy));
-                retList.AddRange(SouthWest.DetectCollision(strategy));
-                retList.AddRange(SouthEast.DetectCollision(strategy));
+                return -1;
             }
-            return retList;
+        }
+
+        private double ToRenderPosition(double pos)
+        {
+            return (pos * 800 / 52);
+        }
+
+        public IEnumerable<QuadTree> GetOuterChilds()
+        {
+            var childs = new List<QuadTree>();
+            if (this.IsSplitted)
+            {
+                foreach (var child in this._quadTreeChilds)
+                {
+                    childs.AddRange(child.GetOuterChilds());
+                }
+            }
+            else
+            {
+                childs.Add(this);
+            }
+            return childs;
+        }
+
+        private void Split()
+        {
+            if (!_needsSplitting || IsSplitted) { return; }
+
+            //Links boven idx 0
+            _quadTreeChilds.Add(new QuadTree(_currentDepth + 1, boundry.X, boundry.Y, (boundry.Height / 2), (boundry.Width / 2)));
+
+            //Rechtsboven idx 1
+            _quadTreeChilds.Add(new QuadTree(_currentDepth + 1, boundry.X + boundry.Width / 2, boundry.Y, (boundry.Height / 2), (boundry.Width / 2)));
+
+            //Linksonder idx 2
+            _quadTreeChilds.Add(new QuadTree(_currentDepth + 1, boundry.X, boundry.Y + boundry.Height / 2, (boundry.Height / 2), (boundry.Width / 2)));
+
+            //Rechtsonder idx 3
+            _quadTreeChilds.Add(new QuadTree(_currentDepth + 1, boundry.X + boundry.Width / 2, boundry.Y + boundry.Height / 2, (boundry.Height / 2), (boundry.Width / 2)));
         }
 
         public IEnumerable<Boundry> GetBoundries()
         {
-            var retList = new List<Boundry>();
-            retList.Add(this.Boundry);
+            var boundries = new List<Boundry>();
 
-            if (NorthWest != null)
-                retList.AddRange(NorthWest.GetBoundries());
-            if (NorthEast != null)
-                retList.AddRange(NorthEast.GetBoundries());
-            if (SouthWest != null)
-                retList.AddRange(SouthWest.GetBoundries());
-            if (SouthEast != null)
-                retList.AddRange(SouthEast.GetBoundries());
-
-            return retList;
-        }
-
-        public void Insert(T entity)
-        {
-            // Check if point is within range
-            if (!Boundry.ContainsPoint(entity))
+            boundries.Add(this.boundry);
+            foreach (var child in _quadTreeChilds)
             {
-                return;
+                boundries.AddRange(child.GetBoundries());
             }
-            // Check wheter there can be an insert
-            else if (numerOfItems < _node_capacity)
-            {
-                entities[numerOfItems] = entity;
-                numerOfItems++;
-                return;
-            }
-
-            if (NorthEast == null)
-            {
-                if (this.getDepth() < MAX_DEPTH)
-                {
-                    subDivide();
-
-                    // Insert existing in new quadrant
-                    for (int i = 0; i < numerOfItems; i++)
-                    {
-                        NorthWest.Insert(entities[i]);
-                        NorthEast.Insert(entities[i]);
-                        SouthWest.Insert(entities[i]);
-                        SouthEast.Insert(entities[i]);
-                    }
-                }
-                else
-                {
-                    if (entities.Length == numerOfItems)
-                    {
-                        var newLenght = entities.Length * 2;
-                        var newArr = new T[newLenght];
-                        entities.CopyTo(newArr, 0);
-                        entities = newArr;
-                    }
-                    entities[numerOfItems] = entity;
-                    numerOfItems++;
-                    return;
-                }
-            }
-            // Insert the new entity
-            NorthWest.Insert(entity);
-            NorthEast.Insert(entity);
-            SouthWest.Insert(entity);
-            SouthEast.Insert(entity);
+            return boundries;
         }
     }
 }

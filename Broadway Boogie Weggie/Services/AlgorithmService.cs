@@ -10,6 +10,7 @@ namespace Broadway_Boogie_Weggie.Services
 {
     public class AlgorithmService : IAlgorithmService
     {
+        private QuadTree _quadTree;
         public void ResetAlgorithm(IEnumerable<Square> squares)
         {
             foreach (var square in squares)
@@ -103,6 +104,21 @@ namespace Broadway_Boogie_Weggie.Services
 
             }
             return nearestToStart;
+        }
+
+        public QuadTree BuildQuadTree(IEnumerable<Artist> artists)
+        {
+            _quadTree = new QuadTree(0, 0, 0, 800, 800);
+            foreach (var artist in artists)
+            {
+                _quadTree.Insert(artist);
+            }
+            return _quadTree;
+        }
+
+        public IEnumerable<Boundry> GetBoundries()
+        {
+            return _quadTree != null ? _quadTree.GetBoundries() : new List<Boundry>();
         }
     }
 }

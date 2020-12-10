@@ -10,12 +10,28 @@ namespace Broadway_Boogie_Weggie.Services
 {
     public class CollisionService : ICollisionService
     {
-        public void CheckCollision(ICollection<Square> squares, bool CollisionWithPath)
+        private IAlgorithmService _algorithmService;
+        public CollisionService(IAlgorithmService algorithmService)
+        {
+            _algorithmService = algorithmService;
+        }
+        public void CheckCollision(ICollection<Square> squares, bool CollisionWithPath, bool useQuadTree)
         {
             foreach (var square in squares)
             {
                 square.IsColliding = false;
             }
+            if (useQuadTree)
+            {
+                CheckCollisionQuadTree(squares, CollisionWithPath);
+            }
+            else
+            {
+                CheckBruteForceCollision(squares, CollisionWithPath);
+            }
+        }
+        private void CheckBruteForceCollision(ICollection<Square> squares, bool CollisionWithPath)
+        {
             foreach (var artist in squares.OfType<Artist>())
             {
                 foreach (var square in squares)
@@ -39,11 +55,17 @@ namespace Broadway_Boogie_Weggie.Services
             }
         }
 
-        public void CheckCollisionQuadTree(ICollection<Square> squares, bool CollisionWithPath)
+        private void CheckCollisionQuadTree(ICollection<Square> squares, bool CollisionWithPath)
         {
-            //QuadTree rootQuadTree = new QuadTree();
+            QuadTree rootQuadTree = _algorithmService.BuildQuadTree(squares.OfType<Artist>());
+            foreach (var tree in rootQuadTree.GetOuterChilds())
+            {
+                var artistsInTree = tree.Content;
 
+            }
         }
+
+
 
     }
 }
