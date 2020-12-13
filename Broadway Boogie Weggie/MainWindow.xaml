@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Broadway_Boogie_Weggie"
         xmlns:converters="clr-namespace:Broadway_Boogie_Weggie.Converters"
+        xmlns:models="clr-namespace:Broadway_Boogie_Weggie.Models"
         mc:Ignorable="d"
         Title="Broadway Boogie Weggie" SizeToContent="WidthAndHeight" DataContext="{Binding Main, Source={StaticResource Locator}}" ResizeMode="NoResize">
     <Window.Resources>
@@ -25,6 +26,11 @@
         <KeyBinding Key="V" Command="{Binding ToggleVisitedCommand}"/>
     </Window.InputBindings>
     <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="Open" Command="{Binding SetupGalleryDiscCommand}"/>
+            </MenuItem>
+        </Menu>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <TextBlock Text="{Binding UseBfsAlgorithm, StringFormat=Shortest: {0}}"  Margin="10"/>
             <TextBlock Text="{Binding UseQuadTree, StringFormat=QuadTree: {0}}" Margin="10"/>
@@ -58,7 +64,16 @@
                                 </Rectangle.ContextMenu>
                                 <Rectangle.Style>
                                     <Style TargetType="{x:Type Rectangle}">
-                                        <Style.Triggers >
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Type}" Value="{x:Type models:Artist}"/>
+                                                    <Condition Binding="{Binding Main.ShowArtists, Source={StaticResource Locator}}" Value="False" />
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
                                             <MultiDataTrigger>
                                                 <MultiDataTrigger.Conditions>
                                                     <Condition Binding="{Binding IsVisited}" Value="True"/>

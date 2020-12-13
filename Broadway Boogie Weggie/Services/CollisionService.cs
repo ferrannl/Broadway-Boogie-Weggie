@@ -43,11 +43,14 @@ namespace Broadway_Boogie_Weggie.Services
                            artist.GalleryY < square.GalleryY + square.Height &&
                            artist.GalleryY + artist.Height > square.GalleryY)
                         {
-
-                            artist.IsColliding = true;
-                            if (!square.IsPath && CollisionWithPath)
+                            if (square.IsPath && CollisionWithPath)
+                            {
+                                artist.IsColliding = true;
+                            }
+                            else if (!square.IsPath)
                             {
                                 square.IsColliding = true;
+                                artist.IsColliding = true;
                             }
                         }
                     }

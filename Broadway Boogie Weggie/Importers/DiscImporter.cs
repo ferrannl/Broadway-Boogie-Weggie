@@ -16,7 +16,7 @@ namespace Broadway_Boogie_Weggie.Importers
             {
                 return ofd.FileName;
             }
-            throw new Exception("Selecteer een bestand.");
+            return "";
         }
 
         public override string PrependType(string path)

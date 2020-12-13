@@ -145,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Files\graph.xml" />
-    <Resource Include="Files\grid.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

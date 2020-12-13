@@ -13,6 +13,8 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private bool _isPath;
         private bool _isSelected;
 
+        public Type Type => Square.GetType();
+
         public bool IsVisited
         {
             get => _isVisited; set
@@ -74,7 +76,6 @@ namespace Broadway_Boogie_Weggie.ViewModels
             }
         }
         public Square Square { get; }
-
         public SquareViewModel(Square square)
         {
             this.Square = square;

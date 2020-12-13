@@ -22,7 +22,7 @@ namespace Broadway_Boogie_Weggie.Readers
                     return lines;
                 }
             }
-            throw new Exception("Bestand bestaat niet.");
+            return new List<string>();
         }
     }
 }

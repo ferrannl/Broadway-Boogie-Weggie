@@ -26,9 +26,19 @@ namespace Broadway_Boogie_Weggie.ViewModels
         private bool _useQuadTree;
         private bool _showPath;
         private bool _showVisited;
+        private bool _showArtists;
+
         public ObservableCollection<Boundry> RenderQuadTreeBoundries { get; set; }
         public bool UsePathCollision { get; set; }
-        public bool ShowArtists { get; set; }
+        public bool ShowArtists
+        {
+            get => _showArtists;
+            set
+            {
+                _showArtists = value;
+                RaisePropertyChanged(() => ShowArtists);
+            }
+        }
         public bool ShowPath
         {
             get => _showPath;
