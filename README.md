@@ -1,3 +1,5 @@
+![Broadway gameplay](logo.gif)
+
 # Broadway Boogie Weggie
 
 School assignment for **Advanced Algorithms** – a Windows desktop application built with **C#**, **.NET**, and **WPF** to visualize and compare different algorithms.
